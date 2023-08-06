@@ -2,8 +2,6 @@ import { json, redirect } from "react-router";
 import EventForm from "../components/EventForm";
 
 function NewEventPage() {
- 
-
   return <EventForm />;
 }
 
@@ -17,19 +15,24 @@ export async function action({ request, params }) {
     date: data.get("date"),
     description: data.get("description"),
   };
-   const response = await fetch("http://localhost:8080/events", {
+  const response = await fetch("http://localhost:8080/events", {
     method: "POST",
     headers: {
-'Content-type' :'application/json'
+      "Content-type": "application/json",
     },
     body: JSON.stringify(evenData),
   });
 
-  if(!response.ok){
-    throw json({
-      message : 'Could not save data ! '
-    },
-    {status: 500})
+  if (response.status === 422) {
+    return response;
   }
-  return redirect('/events')
+  if (!response.ok) {
+    throw json(
+      {
+        message: "Could not save data ! ",
+      },
+      { status: 500 }
+    );
+  }
+  return redirect("/events");
 }
