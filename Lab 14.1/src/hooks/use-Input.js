@@ -26,6 +26,5 @@ const useInput = (validateValue)=>{
         inputBlurHandler,
         resetForm
     };
-
 }
 export default useInput;
